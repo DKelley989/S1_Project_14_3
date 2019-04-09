@@ -37,7 +37,7 @@
       node and false if it doesn't
 */
 
-// Var: Initial variables.
+// Var: Initial global variables.
 var nodeCount = 0;
 var elemCount = 0;
 var textCount = 0;
@@ -49,24 +49,33 @@ window.addEventListener('load', makeTree);
 // Func: Function to create the node tree for the source article on the page. It sets up and places the node tree within the HTML document and displays the node counts from the document.
 function makeTree() {
 
-      // Var: Creates an document fragment of an aside element with the ID of treeBox and a h1 heading element nested within.
-      var aside = document.createDocumentFragment("<aside id=”treeBox”> <h1>Node Tree</h1></aside>");
+      // Var: Creates an aside element with the ID of treeBox and a h1 heading element nested within.
+      var aside = document.createElement("aside");
+      aside.id = "treeBox";
+      aside.innerHTML = "<h1>Node Tree</h1>";
 
-      /// Appends the document fragment to the section element with the ID “main”.
-      aside.appendChild(document.getElementById("main"));
+      // Var: Creates an element node for the section element with the ID of "main".
+      var sectionMain = document.getElementById("main");
 
-      // Var: Contains the initial ordered list element node that will be the foundation of the node tree.
-      var nodeList = document.getElementsByTagName("ol");
+      /// Appends the aside element to the section element with the ID “main”.
+      sectionMain.appendChild(aside);
+
+      // Var: Creates the initial ordered list element node that will be the foundation of the node tree.
+      var nodeList = document.createElement("ol");
+
+      /// Appends the nodeList to the aside element.
+      aside.appendChild(nodeList);
 
       /// Appends the ordered list element node to the aside element fragment.
       aside.appendChild(nodeList);
 
       // Var: Creates a node tree will be based on the contents of the elements matching the CSS selector "#main article".
-      var sourceArticle = document.querySelectorAll("#main article");
+      var sourceArticle = document.querySelector("#main article");
 
       /// Calls the makeBranches() function using the sourceArticle and nodeList variables as parameter values.
       makeBranches(sourceArticle, nodeList);
 
+      /// Displays the total count of nodes, element nodes, text nodes, and whitespace nodes within the span elements whose IDs are “totalNodes”, “elemNodes”, “textNodes”, and “wsNodes”, respectively.
       document.getElementById("totalNodes").innerHTML = nodeCount;
 
       document.getElementById("elemNodes").innerHTML = elemCount;
@@ -86,10 +95,13 @@ function makeBranches(treeNode, nestedList) {
       var liElem = document.createElement("li");
       liElem.textContent = "+--";
 
+      // Var: Creates a span element node a stores it in the snapElem variable.
       var spanElem = document.createElement("span");
 
+      /// Appends the spanElem node to the liElem element node.
       liElem.appendChild(spanElem);
 
+      /// Appends the liElem node to the nestedList element node.
       nestedList.appendChild(liElem);
 
       // If: Checks if treeNode represents an element node.
